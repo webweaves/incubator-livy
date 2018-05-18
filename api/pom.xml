@@ -24,7 +24,7 @@
   </parent>
 
   <groupId>org.apache.livy</groupId>
-  <artifactId>livy-api</artifactId>
+  <artifactId>livy-api_csw</artifactId>
   <version>0.4.1-incubating-SNAPSHOT</version>
   <packaging>jar</packaging>
 

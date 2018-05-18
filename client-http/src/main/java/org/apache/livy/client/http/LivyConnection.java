@@ -26,8 +26,11 @@ import java.security.Principal;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthSchemeProvider;
 import org.apache.http.auth.AuthScope;
@@ -200,6 +203,12 @@ class LivyConnection {
     req.setHeader(HttpHeaders.ACCEPT, APPLICATION_JSON);
     req.setHeader(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON);
     req.setHeader(HttpHeaders.CONTENT_ENCODING, "UTF-8");
+    
+	HttpHost proxy = new HttpHost("<hostname>", 80, "http"); 
+	RequestConfig reqConfig = RequestConfig.custom().setProxy(proxy).build();
+	req.setHeader("Authorization", "Basic " + new String(Base64.encodeBase64("username:password".getBytes())));
+	req.setConfig(reqConfig);
+	  
     return sendRequest(req, retType, uri, uriParams);
   }
 
@@ -208,6 +217,12 @@ class LivyConnection {
       Class<V> retType,
       String uri,
       Object... uriParams) throws Exception {
+	  
+	HttpHost proxy = new HttpHost("<hostname>", 80, "http"); 
+	RequestConfig reqConfig = RequestConfig.custom().setProxy(proxy).build();
+	req.setHeader("Authorization", "Basic " + new String(Base64.encodeBase64("username:password".getBytes())));
+	req.setConfig(reqConfig);
+	  
     req.setURI(new URI(server.getScheme(), null, server.getHost(), server.getPort(),
       uriRoot + String.format(uri, uriParams), null, null));
     // It is no harm to set X-Requested-By when csrf protection is disabled.
